@@ -15,7 +15,6 @@ func GetBookByID(session *gorm.DB, id int) (db.Book, error) {
 	var book db.Book
 	session.Find(&book, id)
 	if book.Name == "" {
-		log.Printf("Book with id: %v Not Found", id)
 		return db.Book{}, errors.New("error: Book not found")
 	}
 	return book, nil
@@ -26,11 +25,13 @@ func handleGetBookByID(w http.ResponseWriter, r *http.Request) {
 	session, err := db.GetDB()
 	if err != nil {
 		log.Printf("Error retrieving session : %v", err)
+		http.Error(w, "Error with db", http.StatusInternalServerError)
 		return
 	}
 	bookID, convErr := strconv.Atoi(r.PathValue("id"))
 	if convErr != nil {
 		log.Printf("Cannot convert id to int: %v", convErr)
+		http.Error(w, "Malformed id", http.StatusBadRequest)
 		return
 	}
 	book, err := GetBookByID(session, bookID)

@@ -22,7 +22,7 @@ func LoggingMiddleware(handler http.HandlerFunc) http.HandlerFunc {
 			statusCode:     http.StatusOK,
 		}
 		handler(rw, r)
-		log.Printf("from mw %v %v %v", rw.statusCode, r.Method, r.URL.Path)
+		log.Printf("%v %v %v", rw.statusCode, r.Method, r.URL.Path)
 
 	}
 }
