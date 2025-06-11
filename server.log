@@ -1,0 +1,8 @@
+Wed Jun 11 16:29:16 2025 200 GET /book/1
+Wed Jun 11 16:29:18 2025 404 GET /book/2
+Wed Jun 11 16:29:19 2025 404 GET /book/3
+Wed Jun 11 16:29:20 2025 404 GET /book/4
+Wed Jun 11 16:29:22 2025 404 GET /book/5
+Wed Jun 11 16:29:24 2025 400 GET /book/id
+Wed Jun 11 16:29:50 2025 400 GET /book/id
+Wed Jun 11 16:29:52 2025 200 GET /book/1
