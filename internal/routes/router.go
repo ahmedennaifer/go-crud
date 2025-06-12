@@ -12,6 +12,7 @@ func Start() {
 	mux.HandleFunc("GET /book/{id}", mw.LoggingMiddleware(handleGetBookByID))
 	mux.HandleFunc("GET /book/name/{name}", mw.LoggingMiddleware(handleGetBookByName))
 	mux.HandleFunc("GET /book/author/{author}", mw.LoggingMiddleware(handleGetBooksByAuthor))
+	mux.HandleFunc("POST /book/", mw.LoggingMiddleware(handleAddBook))
 
 	if err := http.ListenAndServe(":8080", mux); err != nil {
 		log.Fatalf("Error starting server: %v", err)

@@ -4,10 +4,12 @@ import (
 	"crud/internal/handlers/db"
 	"encoding/json"
 	"errors"
-	"gorm.io/gorm"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
+
+	"gorm.io/gorm"
 )
 
 func GetBookByID(session *gorm.DB, id int) (db.Book, error) {
@@ -95,4 +97,27 @@ func handleGetBooksByAuthor(w http.ResponseWriter, r *http.Request) {
 	for _, book := range books {
 		json.NewEncoder(w).Encode(book)
 	}
+}
+
+func handleAddBook(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("content-type", "application/json")
+	session, err := db.GetDB()
+	if err != nil {
+		log.Printf("Error retrieving session : %v", err)
+		http.Error(w, "Error with db", http.StatusInternalServerError)
+		return
+	}
+	var book *db.Book
+
+	if unmarshallErr := json.NewDecoder(r.Body).Decode(&book); unmarshallErr != nil {
+		log.Printf("Error reading request body")
+		http.Error(w, "Could not read the request, try again later", http.StatusInternalServerError)
+	}
+	result := session.Create(&book)
+	if result.Error != nil {
+		log.Printf("Error Inserting Record: %v", result.Error)
+		http.Error(w, "Error adding user", http.StatusInternalServerError)
+		return
+	}
+	fmt.Fprintf(w, "Book added with success\n")
 }
